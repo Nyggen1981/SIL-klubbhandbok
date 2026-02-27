@@ -6,6 +6,7 @@ import './print.css';
 import { getNavigation } from '@/lib/content';
 import Sidebar from '@/components/Sidebar';
 import Search from '@/components/Search';
+import PrintHeader from '@/components/PrintHeader';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 
@@ -22,19 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="nb" className={inter.variable}>
       <body className="min-h-screen flex flex-col font-sans">
-        {/* Kun synlig ved utskrift: logo (legg /public/images/logo.png for eget logo) */}
-        <div className="print-header hidden print:!block" aria-hidden>
-          <div className="px-4 flex items-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={`${basePath}/images/logo.png`}
-              alt="Sauda IL"
-              className="h-10 w-auto object-contain"
-              onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling?.classList.remove('hidden'); }}
-            />
-            <span className="hidden font-semibold text-sauda-dark">Sauda IL</span>
-          </div>
-        </div>
+        <PrintHeader basePath={basePath} />
         <div className="print-footer hidden print:!block" aria-hidden>
           Sauda IL – Klubbhåndbok
         </div>
