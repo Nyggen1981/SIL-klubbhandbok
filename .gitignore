@@ -10,6 +10,9 @@ node_modules
 .next/
 out/
 
+# generated at build
+public/search-docs.json
+
 # misc
 .DS_Store
 *.pem

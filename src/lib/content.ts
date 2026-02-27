@@ -113,9 +113,9 @@ export function getNavigation(): NavChapter[] {
     });
   }
 
-  for (const ch of chapterMap.values()) {
+  Array.from(chapterMap.values()).forEach((ch) => {
     ch.children.sort((a, b) => a.order - b.order);
-  }
+  });
 
   return Array.from(chapterMap.values()).sort((a, b) => a.order - b.order);
 }

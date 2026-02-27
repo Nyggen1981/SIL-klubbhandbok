@@ -61,6 +61,7 @@ export default function Search() {
         ref={inputRef}
         id="handbook-search"
         type="search"
+        role="combobox"
         value={query}
         onChange={(e) => runSearch(e.target.value)}
         onFocus={() => setFocused(true)}
@@ -81,7 +82,7 @@ export default function Search() {
             <li className="px-4 py-3 text-sm text-slate-500">Ingen treff</li>
           ) : (
             results.map((doc) => (
-              <li key={doc.slugPath} role="option">
+              <li key={doc.slugPath} role="option" aria-selected={false}>
                 <button
                   type="button"
                   className="w-full px-4 py-2 text-left text-sm hover:bg-slate-50 focus:bg-slate-50 focus:outline-none"

@@ -1,6 +1,6 @@
 'use client';
 
-import { Zoom } from 'react-medium-image-zoom';
+import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 
 const basePath = process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_BASE_PATH ? process.env.NEXT_PUBLIC_BASE_PATH : '';
@@ -17,6 +17,7 @@ export default function ImageZoom({ src, alt, width, height, className }: Props)
   const resolvedSrc = typeof src === 'string' && src.startsWith('/') ? `${basePath}${src}` : src;
   return (
     <Zoom>
+      {/* eslint-disable-next-line @next/next/no-img-element -- Zoom requires plain img */}
       <img
         src={resolvedSrc}
         alt={alt}
