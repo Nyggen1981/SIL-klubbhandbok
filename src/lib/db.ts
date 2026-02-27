@@ -29,10 +29,11 @@ export async function dbGetAllPages(): Promise<DbPage[]> {
 export async function dbGetPage(slugPath: string): Promise<DbPage | null> {
   const sql = getSql();
   if (!sql) return null;
+  const normalized = slugPath.trim().toLowerCase();
   const rows = await sql`
     SELECT slug_path, title, sort_order, chapter_title, body, updated_at
     FROM handbook_pages
-    WHERE slug_path = ${slugPath}
+    WHERE LOWER(TRIM(slug_path)) = ${normalized}
     LIMIT 1
   `;
   return (rows[0] as DbPage) ?? null;

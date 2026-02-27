@@ -56,11 +56,16 @@ async function main() {
     process.exit(0);
   }
 
+  if (!fs.existsSync(contentDir)) {
+    console.error('content/ finnes ikke ved', contentDir);
+    process.exit(1);
+  }
   const paths = getAllMdxPaths(contentDir);
   if (paths.length === 0) {
-    console.log('Ingen MDX-filer funnet i content/');
-    process.exit(0);
+    console.error('Ingen MDX-filer funnet i content/', contentDir);
+    process.exit(1);
   }
+  console.log('Seeder fra', contentDir, '–', paths.length, 'filer');
 
   const { neon } = await import('@neondatabase/serverless');
   const sql = neon(process.env.DATABASE_URL);

@@ -20,15 +20,22 @@ export default function LoginForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
-      const data = await res.json();
-      if (!data.ok) {
-        setError(data.error || 'Innlogging feilet');
+      const raw = await res.text();
+      let data: { ok?: boolean; error?: string };
+      try {
+        data = raw ? JSON.parse(raw) : {};
+      } catch {
+        setError(res.ok ? 'Ugyldig svar fra server' : `Innlogging feilet (${res.status})`);
         return;
       }
-      router.refresh();
+      if (!res.ok || !data.ok) {
+        setError(data.error || 'Ugyldig brukernavn eller passord');
+        return;
+      }
       router.push('/admin');
-    } catch {
-      setError('Noe gikk galt');
+      router.refresh();
+    } catch (err) {
+      setError('Noe gikk galt. Sjekk at du er koblet til internett og prøv igjen.');
     } finally {
       setLoading(false);
     }
@@ -62,7 +69,11 @@ export default function LoginForm() {
             required
           />
         </div>
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && (
+          <p role="alert" className="text-sm text-red-600" aria-live="polite">
+            {error}
+          </p>
+        )}
         <button
           type="submit"
           disabled={loading}
