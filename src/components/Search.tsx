@@ -66,7 +66,7 @@ export default function Search() {
         onChange={(e) => runSearch(e.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setTimeout(() => setFocused(false), 180)}
-        placeholder="Søk i håndboken… (⌘K / Ctrl+K)"
+        placeholder="Søk i håndboken…"
         className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm placeholder:text-slate-400 focus:border-sauda-accent focus:outline-none focus:ring-1 focus:ring-sauda-accent"
         aria-autocomplete="list"
         aria-expanded={showDropdown}

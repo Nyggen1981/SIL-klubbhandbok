@@ -100,11 +100,21 @@ function dbPageToContentPage(row: { slug_path: string; title: string; sort_order
   };
 }
 
+/** Sorter sider: først kapittel (kapittel-1, kapittel-2, …), deretter rekkefølge innen kapittel. */
+function sortPagesByChapterAndOrder(pages: ContentPage[]): ContentPage[] {
+  return [...pages].sort((a, b) => {
+    const aCh = getOrderFromSlug(a.slug[0] || '');
+    const bCh = getOrderFromSlug(b.slug[0] || '');
+    if (aCh !== bCh) return aCh - bCh;
+    return (a.order ?? 999) - (b.order ?? 999);
+  });
+}
+
 /** Hent alle sider – fra Neon når DATABASE_URL er satt, ellers fra filer. */
 export async function getAllPages(): Promise<ContentPage[]> {
   if (hasDatabase()) {
     const rows = await dbGetAllPages();
-    return rows.map(dbPageToContentPage);
+    return sortPagesByChapterAndOrder(rows.map(dbPageToContentPage));
   }
   return getAllPagesFromFiles();
 }

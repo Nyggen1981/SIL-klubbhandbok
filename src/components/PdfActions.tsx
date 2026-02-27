@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useRef, useCallback } from 'react';
+
 export default function PdfActions({
   currentSlugPath,
   chapterSlug,
@@ -9,13 +11,48 @@ export default function PdfActions({
   chapterSlug: string;
   chapterPagePaths: string[];
 }) {
+  const [loading, setLoading] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+
   const printChapter = () => {
     window.print();
   };
 
-  const openFullHandbookPrint = () => {
-    window.open('/pdf-hele?autoPrint=1', '_blank', 'noopener,noreferrer');
-  };
+  const printFullHandbook = useCallback(() => {
+    setLoading(true);
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('title', 'Utskrift hele håndboken');
+    iframe.style.cssText = 'position:fixed;width:0;height:0;border:0;left:-9999px;top:0;';
+    iframe.src = '/pdf-hele?autoPrint=1';
+    document.body.appendChild(iframe);
+    iframeRef.current = iframe;
+
+    const onLoad = () => {
+      try {
+        iframe.contentWindow?.print();
+      } catch {
+        // Tverrdomene: åpne i ny fane som fallback
+        window.open('/pdf-hele?autoPrint=1', '_blank', 'noopener');
+      }
+      setTimeout(() => {
+        document.body.removeChild(iframe);
+        iframeRef.current = null;
+        setLoading(false);
+      }, 500);
+    };
+
+    iframe.onload = onLoad;
+    // Fallback: fjern spinner etter max 15 sek
+    setTimeout(() => {
+      if (iframeRef.current === iframe && iframe.parentNode) {
+        try {
+          document.body.removeChild(iframe);
+        } catch {}
+        iframeRef.current = null;
+        setLoading(false);
+      }
+    }, 15000);
+  }, []);
 
   return (
     <div className="flex items-center gap-2 print:hidden">
@@ -28,10 +65,11 @@ export default function PdfActions({
       </button>
       <button
         type="button"
-        onClick={openFullHandbookPrint}
-        className="rounded border border-slate-300 bg-white px-3 py-1.5 text-sm text-sauda-dark hover:bg-slate-50"
+        onClick={printFullHandbook}
+        disabled={loading}
+        className="rounded border border-slate-300 bg-white px-3 py-1.5 text-sm text-sauda-dark hover:bg-slate-50 disabled:opacity-60"
       >
-        Last ned hele håndboken (PDF)
+        {loading ? 'Laster…' : 'Last ned hele håndboken (PDF)'}
       </button>
     </div>
   );
