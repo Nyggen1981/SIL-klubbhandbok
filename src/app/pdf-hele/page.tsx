@@ -5,8 +5,8 @@ export const metadata = {
   title: 'Last ned hele håndboken – Sauda IL',
 };
 
-export default function PdfHelePage() {
-  const chapters = getNavigation();
+export default async function PdfHelePage() {
+  const chapters = await getNavigation();
 
   return (
     <div className="max-w-2xl print:max-w-none">

@@ -3,10 +3,7 @@ import { getAllPages, getPageBySlug } from '@/lib/content';
 import { compileMDX } from '@/lib/mdx';
 import PdfActions from '@/components/PdfActions';
 
-export async function generateStaticParams() {
-  const pages = getAllPages();
-  return pages.map((p) => ({ slug: p.slug }));
-}
+export const dynamic = 'force-dynamic';
 
 interface PageProps {
   params: Promise<{ slug: string[] }>;
@@ -14,11 +11,12 @@ interface PageProps {
 
 export default async function MdxPage({ params }: PageProps) {
   const { slug } = await params;
-  const page = getPageBySlug(slug);
+  const page = await getPageBySlug(slug);
   if (!page) notFound();
 
   const { content } = await compileMDX(page.rawBody, page.filePath);
-  const chapters = getAllPages().filter((p) => p.slug[0] === page.slug[0]);
+  const allPages = await getAllPages();
+  const chapters = allPages.filter((p) => p.slug[0] === page.slug[0]);
   const currentChapterSlug = page.slug[0] ?? '';
 
   return (

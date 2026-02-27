@@ -35,15 +35,12 @@ npm run dev
 - **Branding**: Sauda IL-farger (blå/hvit) og font Inter i `tailwind.config.ts` og `src/app/globals.css`.
 - **Base path**: Interne lenker er relative; egnet for masking under f.eks. `saudail.no/handbok` via `BASE_PATH` / `NEXT_PUBLIC_BASE_PATH`.
 
-## Admin med TinaCMS
+## Admin og database (Neon)
 
-For redigering i nettleseren og commit til GitHub:
+**Innhold lagres i Neon (Postgres), ikke i Git.** Admin logger inn på selve nettsiden med passord.
 
-1. Kjør: `npx @tinacms/cli@latest init`. Velg public-mappen når du blir bedt om det.
-2. Opprett [Tina Cloud](https://app.tina.io)-prosjekt og legg inn `NEXT_PUBLIC_TINA_CLIENT_ID` og `TINA_TOKEN` i miljøvariabler (lokal og Vercel).
-3. Åpne `/admin` for å redigere innhold. Endringer committes til repoet ved bruk av Tina Cloud.
-
-Konfigurasjonen ligger i `tina/config.ts`. I innholdsfeltet kan administratorer dra og slippe bilder; bilder har eget felt for **alt-tekst** (beskrivelse for skjermlesere). Feltet **Sist oppdatert** kan settes manuelt eller oppdateres automatisk ved lagring via en Tina Cloud-hook.
+- **Innlogging:** Se [ADMIN.md](ADMIN.md) – sett **ADMIN_PASSWORD** (og evt. ADMIN_USERNAME) i miljøvariabler, åpne **/admin** og logg inn.
+- **Database:** Se [NEON.md](NEON.md) – opprett prosjekt i [Neon](https://console.neon.tech), kjør `scripts/init-neon.sql`, sett **DATABASE_URL**, og fyll eventuelt fra filer med `node scripts/seed-neon-from-files.mjs`. I innholdsfeltet kan administratorer dra og slippe bilder; bilder har eget felt for **alt-tekst** (beskrivelse for skjermlesere). Feltet **Sist oppdatert** kan settes manuelt eller oppdateres automatisk ved lagring via en Tina Cloud-hook.
 
 ## Deployment (Vercel + GitHub)
 

@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { slugify } from './slug';
+import { hasDatabase, dbGetAllPages, dbGetPage } from './db';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
 
@@ -28,26 +29,7 @@ function getOrderFromSlug(slug: string): number {
   return match ? parseInt(match[1], 10) : 999;
 }
 
-function getAllMdxPaths(dir: string, base: string[] = []): { relativePath: string; slug: string[] }[] {
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-  const result: { relativePath: string; slug: string[] }[] = [];
-
-  for (const ent of entries) {
-    const fullPath = path.join(dir, ent.name);
-    const relPath = [...base, ent.name];
-
-    if (ent.isDirectory()) {
-      result.push(...getAllMdxPaths(fullPath, relPath));
-    } else if (ent.isFile() && ent.name.endsWith('.mdx')) {
-      const slug = relPath.map((p) => slugify(p.replace(/\.mdx$/, '')));
-      result.push({ relativePath: path.join(dir, ent.name), slug });
-    }
-  }
-
-  return result;
-}
-
-export function getAllPages(): ContentPage[] {
+function getAllPagesFromFiles(): ContentPage[] {
   if (!fs.existsSync(CONTENT_DIR)) return [];
 
   const paths = getAllMdxPaths(CONTENT_DIR);
@@ -82,14 +64,62 @@ export function getAllPages(): ContentPage[] {
   return pages;
 }
 
-export function getPageBySlug(slug: string[]): ContentPage | null {
-  const pages = getAllPages();
+function getAllMdxPaths(dir: string, base: string[] = []): { relativePath: string; slug: string[] }[] {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const result: { relativePath: string; slug: string[] }[] = [];
+
+  for (const ent of entries) {
+    const fullPath = path.join(dir, ent.name);
+    const relPath = [...base, ent.name];
+
+    if (ent.isDirectory()) {
+      result.push(...getAllMdxPaths(fullPath, relPath));
+    } else if (ent.isFile() && ent.name.endsWith('.mdx')) {
+      const slug = relPath.map((p) => slugify(p.replace(/\.mdx$/, '')));
+      result.push({ relativePath: path.join(dir, ent.name), slug });
+    }
+  }
+
+  return result;
+}
+
+function dbPageToContentPage(row: { slug_path: string; title: string; sort_order: number; chapter_title: string | null; body: string }): ContentPage {
+  const slug = row.slug_path.split('/').filter(Boolean);
+  return {
+    slug,
+    slugPath: row.slug_path,
+    filePath: '',
+    title: row.title,
+    order: row.sort_order,
+    chapterTitle: row.chapter_title ?? undefined,
+    rawBody: row.body,
+    frontmatter: { title: row.title, order: row.sort_order, chapterTitle: row.chapter_title },
+  };
+}
+
+/** Hent alle sider – fra Neon hvis DATABASE_URL er satt, ellers fra filer. */
+export async function getAllPages(): Promise<ContentPage[]> {
+  if (hasDatabase()) {
+    const rows = await dbGetAllPages();
+    return rows.map(dbPageToContentPage);
+  }
+  return getAllPagesFromFiles();
+}
+
+/** Hent én side – fra Neon hvis DATABASE_URL er satt, ellers fra filer. */
+export async function getPageBySlug(slug: string[]): Promise<ContentPage | null> {
   const slugPath = slug.join('/');
+  if (hasDatabase()) {
+    const row = await dbGetPage(slugPath);
+    return row ? dbPageToContentPage(row) : null;
+  }
+  const pages = getAllPagesFromFiles();
   return pages.find((p) => p.slugPath === slugPath) ?? null;
 }
 
-export function getNavigation(): NavChapter[] {
-  const pages = getAllPages();
+/** Navigasjon til sidebar – fra Neon hvis DATABASE_URL er satt, ellers fra filer. */
+export async function getNavigation(): Promise<NavChapter[]> {
+  const pages = await getAllPages();
   const chapterMap = new Map<string, NavChapter>();
 
   for (const p of pages) {

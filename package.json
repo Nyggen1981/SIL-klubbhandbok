@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/build-search.mjs && next build",
+    "build": "node scripts/build-search.mjs && node scripts/build-search-from-db.mjs && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -18,7 +18,8 @@
     "next-mdx-remote": "^6.0.0",
     "gray-matter": "^4.0.3",
     "tinacms": "^1.6.0",
-    "react-medium-image-zoom": "^5.2.14"
+    "react-medium-image-zoom": "^5.2.14",
+    "@neondatabase/serverless": "^0.10.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

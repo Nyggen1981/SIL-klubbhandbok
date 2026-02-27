@@ -17,8 +17,8 @@ export const metadata: Metadata = {
 
 const basePath = process.env.NODE_ENV === 'production' && process.env.BASE_PATH ? process.env.BASE_PATH : '';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const chapters = getNavigation();
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const chapters = await getNavigation();
 
   return (
     <html lang="nb" className={inter.variable}>

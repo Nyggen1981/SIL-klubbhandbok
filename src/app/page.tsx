@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { getNavigation } from '@/lib/content';
 
-export default function HomePage() {
-  const chapters = getNavigation();
+export default async function HomePage() {
+  const chapters = await getNavigation();
 
   return (
     <div className="max-w-2xl">
