@@ -53,6 +53,7 @@ Konfigurasjonen ligger i `tina/config.ts`. I innholdsfeltet kan administratorer 
 4. Hvis håndboken skal ligge under en subpath (f.eks. `saudail.no/handbok`), sett i Vercel:
    - `BASE_PATH=/handbok`
    - `NEXT_PUBLIC_BASE_PATH=/handbok`
+   - **Merk:** Når BASE_PATH er satt, svarer appen kun på den stien. For å bruke Vercel-URL (f.eks. `prosjekt.vercel.app`) uten subpath, la BASE_PATH og NEXT_PUBLIC_BASE_PATH være **utelatt** eller tomme.
 
 ## Scripts
 
