@@ -40,8 +40,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             />
             Sauda IL – Klubbhåndbok
           </Link>
-          <div className="flex-1 flex justify-end" role="search">
+          <div className="flex-1 flex items-center justify-end gap-3" role="search">
             <Search />
+            <Link href="/admin" className="text-sm text-slate-600 hover:text-sauda-accent no-print">
+              Admin
+            </Link>
           </div>
         </header>
         <div className="flex flex-1 overflow-hidden">

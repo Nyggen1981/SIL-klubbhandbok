@@ -97,7 +97,7 @@ function dbPageToContentPage(row: { slug_path: string; title: string; sort_order
   };
 }
 
-/** Hent alle sider – fra Neon hvis DATABASE_URL er satt, ellers fra filer. */
+/** Hent alle sider – fra Neon når DATABASE_URL er satt, ellers fra filer. */
 export async function getAllPages(): Promise<ContentPage[]> {
   if (hasDatabase()) {
     const rows = await dbGetAllPages();
@@ -106,7 +106,7 @@ export async function getAllPages(): Promise<ContentPage[]> {
   return getAllPagesFromFiles();
 }
 
-/** Hent én side – fra Neon hvis DATABASE_URL er satt, ellers fra filer. */
+/** Hent én side – fra Neon når DATABASE_URL er satt, ellers fra filer. */
 export async function getPageBySlug(slug: string[]): Promise<ContentPage | null> {
   const slugPath = slug.join('/');
   if (hasDatabase()) {

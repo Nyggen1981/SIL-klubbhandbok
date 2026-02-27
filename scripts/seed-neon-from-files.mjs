@@ -53,8 +53,8 @@ function matterParse(raw, slug) {
 
 async function main() {
   if (!process.env.DATABASE_URL) {
-    console.error('Sett DATABASE_URL (Neon connection string) og kjør init-neon.sql først.');
-    process.exit(1);
+    console.log('DATABASE_URL ikke satt – hopper over seed');
+    process.exit(0);
   }
 
   const paths = getAllMdxPaths(contentDir);
