@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import './print.css';
@@ -28,8 +29,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           Sauda IL – Klubbhåndbok
         </div>
 
-        <header className="no-print flex flex-shrink-0 items-center gap-4 border-b border-slate-200 bg-white px-4 py-3">
-          <Link href="/" className="font-semibold text-sauda-dark">
+        <header className="no-print flex flex-shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 py-3">
+          <Link href="/" className="flex items-center gap-3 font-semibold text-sauda-dark">
+            <Image
+              src="/images/Logo.png"
+              alt="Sauda Idrettslag 1919"
+              width={48}
+              height={48}
+              className="h-12 w-auto object-contain"
+            />
             Sauda IL – Klubbhåndbok
           </Link>
           <div className="flex-1 flex justify-end" role="search">

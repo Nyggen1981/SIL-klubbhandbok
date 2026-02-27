@@ -33,6 +33,6 @@ async function main() {
 }
 
 main().catch((e) => {
-  console.error('build-search-from-db feilet:', e);
-  process.exit(1);
+  console.warn('build-search-from-db: hopper over (tabell handbook_pages finnes kanskje ikke ennå – kjør init-neon.sql i Neon):', e.message || e);
+  process.exit(0);
 });

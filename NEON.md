@@ -8,8 +8,11 @@ Innholdet kan lagres i **Neon** (serverless Postgres) i stedet for i Git. Da lev
 
 1. Logg inn på [console.neon.tech](https://console.neon.tech).
 2. Opprett et **nytt prosjekt** (eller bruk eksisterende), f.eks. `SIL-klubbhandbok`.
-3. Gå til **SQL Editor** og kjør SQL-en i **`scripts/init-neon.sql`** (oppretter tabellen `handbook_pages`).
-4. Under **Connection details** / **Connect**: kopier **connection string** og lagre den. Den ser omtrent slik ut:
+3. Kopier **connection string** (Connection details / Connect) og legg den i **DATABASE_URL** (se under).
+4. **Opprett tabellen** – velg én måte:
+   - **Enklest:** I prosjektmappen: `node scripts/init-neon.mjs` (krever at DATABASE_URL er satt i .env.local). Da opprettes `handbook_pages` automatisk.
+   - **Manuelt:** Gå til **SQL Editor** i Neon og kjør SQL-en i **`scripts/init-neon.sql`**.
+5. Connection string ser omtrent slik ut:
    ```text
    postgresql://bruker:passord@ep-xxx.region.aws.neon.tech/neondb?sslmode=require
    ```
