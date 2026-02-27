@@ -43,7 +43,7 @@ export default async function MdxPage({ params }: PageProps) {
       </div>
       <div className="prose">{content}</div>
       {updatedAtFormatted && (
-        <p className="mt-6 text-right text-xs text-slate-400 no-print" aria-label="Sist oppdatert">
+        <p className="mt-6 text-center text-xs text-slate-400 no-print" aria-label="Sist oppdatert">
           Sist oppdatert: {updatedAtFormatted}
         </p>
       )}

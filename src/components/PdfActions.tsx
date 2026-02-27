@@ -13,6 +13,10 @@ export default function PdfActions({
     window.print();
   };
 
+  const openFullHandbookPrint = () => {
+    window.open('/pdf-hele?autoPrint=1', '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div className="flex items-center gap-2 print:hidden">
       <button
@@ -22,12 +26,13 @@ export default function PdfActions({
       >
         Last ned kapittel som PDF
       </button>
-      <a
-        href="/pdf-hele"
+      <button
+        type="button"
+        onClick={openFullHandbookPrint}
         className="rounded border border-slate-300 bg-white px-3 py-1.5 text-sm text-sauda-dark hover:bg-slate-50"
       >
         Last ned hele håndboken (PDF)
-      </a>
+      </button>
     </div>
   );
 }

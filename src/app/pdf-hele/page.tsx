@@ -1,6 +1,7 @@
 import { getAllPages } from '@/lib/content';
 import { compileMDX } from '@/lib/mdx';
 import PdfHeleButton from '@/components/PdfHeleButton';
+import AutoPrintTrigger from '@/components/AutoPrintTrigger';
 
 export const metadata = {
   title: 'Last ned hele håndboken – Sauda IL',
@@ -8,7 +9,12 @@ export const metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default async function PdfHelePage() {
+type SearchParams = Promise<{ autoPrint?: string }>;
+
+export default async function PdfHelePage({ searchParams }: { searchParams?: SearchParams }) {
+  const params = searchParams ? await searchParams : {};
+  const autoPrint = params.autoPrint === '1';
+
   const pages = await getAllPages();
   const withContent = await Promise.all(
     pages.map(async (p) => ({
@@ -19,6 +25,7 @@ export default async function PdfHelePage() {
 
   return (
     <div className="max-w-3xl print:max-w-none">
+      <AutoPrintTrigger autoPrint={autoPrint} />
       <div className="no-print mb-6 flex flex-col gap-2">
         <PdfHeleButton />
         <p className="text-sm text-slate-600">
