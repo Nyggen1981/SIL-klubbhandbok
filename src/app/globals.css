@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --sauda-dark: #0f172a;
+  --sauda-mid: #1e3a5f;
+  --sauda-primary: #0066b2;
+  --sauda-accent: #0080d4;
+}
+
+body {
+  @apply bg-white text-sauda-dark antialiased;
+}
+
+/* Prose for MDX content */
+.prose h1 { @apply text-2xl font-bold mt-6 mb-4; }
+.prose h2 { @apply text-xl font-semibold mt-6 mb-3; }
+.prose h3 { @apply text-lg font-medium mt-4 mb-2; }
+.prose p { @apply my-3 leading-relaxed; }
+.prose ul { @apply list-disc pl-6 my-3; }
+.prose ol { @apply list-decimal pl-6 my-3; }
+.prose a { @apply text-sauda-accent underline hover:no-underline; }
+.prose img { @apply rounded max-w-full h-auto; }

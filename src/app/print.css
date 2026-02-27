@@ -1,0 +1,93 @@
+/* PDF / utskriftslayout – profesjonell utskrift og eksport */
+
+@media print {
+  /* Skjul navigasjon, søk og admin-knapper */
+  .no-print,
+  header,
+  nav,
+  aside,
+  [role="search"],
+  .print\:hidden,
+  a[href^="/admin"],
+  button[type="button"] {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #1e293b;
+  }
+
+  main {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  /* Logo øverst – vises på første side (fixed topp) */
+  .print-header {
+    display: block !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #e2e8f0;
+    background: white;
+    z-index: 9999;
+  }
+
+  .print-header img {
+    max-height: 40px;
+    width: auto;
+  }
+
+  /* Sidetall nederst */
+  .print-footer {
+    display: block !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: 9pt;
+    color: #64748b;
+    text-align: center;
+    padding: 0.25rem 0;
+    background: white;
+    z-index: 9999;
+  }
+
+  @page {
+    size: A4;
+    margin: 2.2cm 1.5cm 2cm 1.5cm;
+  }
+
+  /* Tvunget sideskift før hvert H1 (nytt hovedkapittel) */
+  .prose h1,
+  article h1 {
+    page-break-before: always;
+  }
+  .prose h1:first-of-type,
+  article h1:first-of-type {
+    page-break-before: avoid;
+  }
+
+  /* Unngå sideskift inne i blokker */
+  .prose h1, .prose h2, .prose h3, .prose h4,
+  .prose p, .prose ul, .prose ol, .prose li {
+    page-break-after: avoid;
+  }
+
+  .prose img {
+    max-width: 100%;
+    page-break-inside: avoid;
+  }
+
+  /* Lenker: vis URL ved utskrift */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #64748b;
+  }
+}
