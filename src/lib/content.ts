@@ -108,7 +108,8 @@ export async function getAllPages(): Promise<ContentPage[]> {
 
 /** Hent én side – fra Neon når DATABASE_URL er satt, ellers fra filer. */
 export async function getPageBySlug(slug: string[]): Promise<ContentPage | null> {
-  const slugPath = slug.join('/');
+  const normalizedSlug = slug.map((s) => slugify(s)).filter(Boolean);
+  const slugPath = normalizedSlug.join('/');
   if (hasDatabase()) {
     const row = await dbGetPage(slugPath);
     return row ? dbPageToContentPage(row) : null;

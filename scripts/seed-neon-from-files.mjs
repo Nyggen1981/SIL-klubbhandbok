@@ -6,10 +6,9 @@
  */
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const contentDir = path.join(path.dirname(__dirname), 'content');
+// Bruk cwd slik at seed fungerer både lokalt og under Vercel build
+const contentDir = path.join(process.cwd(), 'content');
 
 function slugify(value) {
   if (!value || typeof value !== 'string') return '';
