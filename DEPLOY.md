@@ -36,6 +36,13 @@ Erstatt `DITT-BRUKERNAVN` og `REPO-NAVN` med ditt GitHub-brukernavn og repo-navn
 
 Etter noen minutter får du en URL (f.eks. `klubbhandbok-saudail.vercel.app`).
 
+### Får du 404 på forsiden (Vercel-URL)?
+
+1. Gå til **Vercel** → ditt prosjekt → **Settings** → **Environment Variables**.
+2. **Slett** eller fjern verdien på `BASE_PATH` og `NEXT_PUBLIC_BASE_PATH` (ellers svarer appen bare på f.eks. `/handbok`, ikke på `/`).
+3. **Settings** → **General**: **Root Directory** skal være tom eller `.` (ikke en undermappe).
+4. **Redeploy**: **Deployments** → tre prikker på siste deploy → **Redeploy**.
+
 ## 4. Valgfritt: subpath (f.eks. saudail.no/handbok)
 
 Hvis håndboken skal ligge under en subpath (f.eks. `saudail.no/handbok`):
