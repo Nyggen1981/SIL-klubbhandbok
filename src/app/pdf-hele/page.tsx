@@ -1,35 +1,43 @@
-import Link from 'next/link';
-import { getNavigation } from '@/lib/content';
+import { getAllPages } from '@/lib/content';
+import { compileMDX } from '@/lib/mdx';
+import PdfHeleButton from '@/components/PdfHeleButton';
 
 export const metadata = {
   title: 'Last ned hele håndboken – Sauda IL',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function PdfHelePage() {
-  const chapters = await getNavigation();
+  const pages = await getAllPages();
+  const withContent = await Promise.all(
+    pages.map(async (p) => ({
+      ...p,
+      content: (await compileMDX(p.rawBody, p.filePath)).content,
+    }))
+  );
 
   return (
-    <div className="max-w-2xl print:max-w-none">
-      <h1 className="text-2xl font-bold text-sauda-dark">Hele klubbhåndboken</h1>
-      <p className="mt-2 text-slate-600">
-        For å få hele håndboken som én PDF: åpne hvert kapittel i menyen og klikk «Last ned kapittel som PDF», deretter slå sammen PDF-ene i ett dokument. Alternativt kan du skrive ut denne siden for et innholdsfortegnelse.
-      </p>
-      <ul className="mt-6 space-y-4">
-        {chapters.map((ch) => (
-          <li key={ch.slug} className="chapter-break">
-            <h2 className="text-lg font-semibold">{ch.title}</h2>
-            <ul className="ml-4 mt-2 space-y-1">
-              {ch.children.map((child) => (
-                <li key={child.slugPath}>
-                  <Link href={`/${child.slugPath}`} className="text-sauda-accent hover:underline">
-                    {child.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </li>
+    <div className="max-w-3xl print:max-w-none">
+      <div className="no-print mb-6 flex flex-col gap-2">
+        <PdfHeleButton />
+        <p className="text-sm text-slate-600">
+          Klikk knappen over og velg «Lagre som PDF» eller «Skriv ut til PDF» for å laste ned hele håndboken som én fil.
+        </p>
+      </div>
+
+      <div className="pdf-hele-content">
+        <h1 className="text-2xl font-bold text-sauda-dark mb-8">Sauda IL – Klubbhåndbok</h1>
+        {withContent.map((item, i) => (
+          <section
+            key={item.slugPath}
+            className={i === 0 ? 'pdf-section pdf-section-first' : 'pdf-section'}
+          >
+            <h2 className="text-xl font-semibold text-sauda-dark mb-4">{item.title}</h2>
+            <div className="prose">{item.content}</div>
+          </section>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

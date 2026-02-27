@@ -63,6 +63,14 @@
     margin: 2.2cm 1.5cm 2cm 1.5cm;
   }
 
+  /* Hele håndboken: sideskift før hver seksjon (unntatt første) */
+  .pdf-section {
+    page-break-before: always;
+  }
+  .pdf-section-first {
+    page-break-before: avoid;
+  }
+
   /* Tvunget sideskift før hvert H1 (nytt hovedkapittel) */
   .prose h1,
   article h1 {

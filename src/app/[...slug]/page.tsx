@@ -19,6 +19,18 @@ export default async function MdxPage({ params }: PageProps) {
   const chapters = allPages.filter((p) => p.slug[0] === page.slug[0]);
   const currentChapterSlug = page.slug[0] ?? '';
 
+  const updatedAtFormatted =
+    page.updatedAt &&
+    (() => {
+      try {
+        const d = new Date(page.updatedAt);
+        if (Number.isNaN(d.getTime())) return null;
+        return d.toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' });
+      } catch {
+        return null;
+      }
+    })();
+
   return (
     <article className="max-w-3xl">
       <div className="no-print mb-4 flex items-center justify-between gap-4">
@@ -30,6 +42,11 @@ export default async function MdxPage({ params }: PageProps) {
         />
       </div>
       <div className="prose">{content}</div>
+      {updatedAtFormatted && (
+        <p className="mt-6 text-right text-xs text-slate-400 no-print" aria-label="Sist oppdatert">
+          Sist oppdatert: {updatedAtFormatted}
+        </p>
+      )}
     </article>
   );
 }

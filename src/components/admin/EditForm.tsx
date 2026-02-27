@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import RichTextEditor from './RichTextEditor';
 
 type Props = {
   slugPath: string;
@@ -88,14 +89,13 @@ export default function EditForm({ slugPath, initialTitle, initialOrder, initial
           </div>
         </div>
         <div>
-          <label htmlFor="body" className="block text-sm font-medium text-slate-700">Innhold (Markdown)</label>
-          <textarea
-            id="body"
-            rows={20}
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            className="mt-1 w-full rounded border border-slate-300 px-3 py-2 font-mono text-sm"
-            spellCheck="true"
+          <label htmlFor="body" className="block text-sm font-medium text-slate-700 mb-1">Innhold</label>
+          <p className="text-slate-500 text-xs mb-2">Bruk verktøylinjen for fet, kursiv, overskrifter, lister, lenker og bilder.</p>
+          <RichTextEditor
+            key={slugPath}
+            initialMarkdown={body}
+            onChange={setBody}
+            minHeight="320px"
           />
         </div>
         {error && <p className="text-sm text-red-600">{error}</p>}

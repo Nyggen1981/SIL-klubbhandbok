@@ -15,6 +15,8 @@ export interface ContentPage {
   chapterTitle?: string;
   rawBody: string;
   frontmatter: Record<string, unknown>;
+  /** Sist oppdatert (fra DB); kun satt for sider fra Neon */
+  updatedAt?: string;
 }
 
 export interface NavChapter {
@@ -83,7 +85,7 @@ function getAllMdxPaths(dir: string, base: string[] = []): { relativePath: strin
   return result;
 }
 
-function dbPageToContentPage(row: { slug_path: string; title: string; sort_order: number; chapter_title: string | null; body: string }): ContentPage {
+function dbPageToContentPage(row: { slug_path: string; title: string; sort_order: number; chapter_title: string | null; body: string; updated_at?: string }): ContentPage {
   const slug = row.slug_path.split('/').filter(Boolean);
   return {
     slug,
@@ -94,6 +96,7 @@ function dbPageToContentPage(row: { slug_path: string; title: string; sort_order
     chapterTitle: row.chapter_title ?? undefined,
     rawBody: row.body,
     frontmatter: { title: row.title, order: row.sort_order, chapterTitle: row.chapter_title },
+    updatedAt: row.updated_at,
   };
 }
 
